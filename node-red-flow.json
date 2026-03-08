@@ -8,6 +8,186 @@
         "env": []
     },
     {
+        "id": "24815a7bd841dc8c",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-node-mongodb": "0.2.5"
+        }
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "CampusBroker",
+        "broker": "mqtt://automaatio:Z0od2PZF65jbtcXu@automaatio.cloud.shiftr.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "6a1a07f561f841c1",
+        "type": "ui_base",
+        "theme": {
+            "name": "theme-light",
+            "lightTheme": {
+                "default": "#0094CE",
+                "baseColor": "#0094CE",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": true,
+                "reset": false
+            },
+            "darkTheme": {
+                "default": "#097479",
+                "baseColor": "#097479",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif",
+                "edited": false
+            },
+            "customTheme": {
+                "name": "Untitled Theme 1",
+                "default": "#4B7930",
+                "baseColor": "#4B7930",
+                "baseFont": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+            },
+            "themeState": {
+                "base-color": {
+                    "default": "#0094CE",
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-titlebar-backgroundColor": {
+                    "value": "#0094CE",
+                    "edited": false
+                },
+                "page-backgroundColor": {
+                    "value": "#fafafa",
+                    "edited": false
+                },
+                "page-sidebar-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-textColor": {
+                    "value": "#1bbfff",
+                    "edited": false
+                },
+                "group-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "group-backgroundColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "widget-textColor": {
+                    "value": "#111111",
+                    "edited": false
+                },
+                "widget-backgroundColor": {
+                    "value": "#0094ce",
+                    "edited": false
+                },
+                "widget-borderColor": {
+                    "value": "#ffffff",
+                    "edited": false
+                },
+                "base-font": {
+                    "value": "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Helvetica Neue,sans-serif"
+                }
+            },
+            "angularTheme": {
+                "primary": "indigo",
+                "accents": "blue",
+                "warn": "red",
+                "background": "grey",
+                "palette": "light"
+            }
+        },
+        "site": {
+            "name": "Node-RED Dashboard",
+            "hideToolbar": "false",
+            "allowSwipe": "false",
+            "lockMenu": "false",
+            "allowTempTheme": "true",
+            "dateFormat": "DD/MM/YYYY",
+            "sizes": {
+                "sx": 48,
+                "sy": 48,
+                "gx": 6,
+                "gy": 6,
+                "cx": 6,
+                "cy": 6,
+                "px": 0,
+                "py": 0
+            }
+        }
+    },
+    {
+        "id": "ee89d8c92fed63c0",
+        "type": "mongodb",
+        "hostname": "cluster0.stskmy5.mongodb.net",
+        "topology": "dnscluster",
+        "connectOptions": "",
+        "port": 27017,
+        "db": "data_ml",
+        "name": "Atlas DB"
+    },
+    {
+        "id": "2b5921ba2464e724",
+        "type": "ui_tab",
+        "name": "Koti",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "b29c813c592b53e4",
+        "type": "ui_group",
+        "name": "Mittarit",
+        "tab": "2b5921ba2464e724",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "7280521e9ba866e4",
+        "type": "ui_group",
+        "name": "Kampus Monitori",
+        "tab": "8df72da18b85509e",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8df72da18b85509e",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
         "id": "fbed3860f21e17a6",
         "type": "debug",
         "z": "2500f540ef820631",
@@ -50,7 +230,7 @@
         "type": "function",
         "z": "2500f540ef820631",
         "name": "Format Data",
-        "func": "// Asetetaan topic, jotta nimi näkyy ylhäällä\nmsg.topic = msg.payload.id;\n\nvar standardData = {};\nstandardData.device = msg.payload.id;\n\n// Tarkistetaan termit - huomaa hakasulkeet ja lainausmerkit välilyönnille!\nif (msg.payload.pCount !== undefined) {\n    standardData.people = Number(msg.payload.pCount);\n} else if (msg.payload[\"person count\"] !== undefined) {\n    standardData.people = Number(msg.payload[\"person count\"]);\n} else {\n    standardData.people = 0;\n}\n\nmsg.payload = standardData;\nreturn msg;",
+        "func": "// 1. Luodaan uusi tyhjä objekti\nvar standardData = {};\n\n// 2. Lisätään kaikki halutut tiedot tämän objektin sisälle\nstandardData.device = msg.payload.id;\nstandardData.people = Number(msg.payload.pCount || msg.payload[\"person count\"] || 0);\n\n// TÄMÄ ON SE RATKAISEVA RIVI:\nstandardData.timestamp = new Date().toISOString();\n\n// 3. Korvataan koko msg.payload tällä uudella objektilla\nmsg.payload = standardData;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -72,7 +252,7 @@
         "type": "debug",
         "z": "2500f540ef820631",
         "name": "debug 3",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -94,7 +274,7 @@
         "upsert": false,
         "multi": false,
         "operation": "insert",
-        "x": 840,
+        "x": 920,
         "y": 860,
         "wires": []
     },
@@ -202,8 +382,8 @@
         "topic": "",
         "payload": "20",
         "payloadType": "num",
-        "x": 1050,
-        "y": 940,
+        "x": 750,
+        "y": 560,
         "wires": [
             [
                 "9212fbfbeea284a2"
@@ -211,69 +391,32 @@
         ]
     },
     {
-        "id": "mqtt_broker",
-        "type": "mqtt-broker",
-        "name": "CampusBroker",
-        "broker": "mqtt://automaatio:Z0od2PZF65jbtcXu@automaatio.cloud.shiftr.io",
-        "port": "1883",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 15,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "ee89d8c92fed63c0",
-        "type": "mongodb",
-        "hostname": "cluster0.91fze.mongodb.net",
-        "topology": "dnscluster",
-        "connectOptions": "",
-        "port": 27017,
-        "db": "data_ml",
-        "name": "Atlas DB"
-    },
-    {
-        "id": "b29c813c592b53e4",
-        "type": "ui_group",
-        "name": "Mittarit",
-        "tab": "2b5921ba2464e724",
-        "order": 1,
-        "disp": true,
-        "width": "20",
-        "collapse": false,
-        "className": ""
-    },
-    {
-        "id": "2b5921ba2464e724",
-        "type": "ui_tab",
-        "name": "Koti",
-        "icon": "dashboard",
-        "order": 1,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "013686a6aca9063b",
-        "type": "global-config",
-        "env": [],
-        "modules": {
-            "node-red-node-mongodb": "0.2.5",
-            "node-red-dashboard": "3.6.6"
-        }
+        "id": "dfc83feb8ee709d7",
+        "type": "inject",
+        "z": "2500f540ef820631",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "object",
+        "payloadType": "date",
+        "x": 720,
+        "y": 700,
+        "wires": [
+            [
+                "430a83820ba9693b"
+            ]
+        ]
     }
 ]
