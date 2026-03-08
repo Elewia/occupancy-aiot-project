@@ -1,0 +1,279 @@
+[
+    {
+        "id": "2500f540ef820631",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fbed3860f21e17a6",
+        "type": "debug",
+        "z": "2500f540ef820631",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 160,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "2560d1682ee601ee",
+        "type": "mqtt in",
+        "z": "2500f540ef820631",
+        "name": "AIoT MQTT Reciever",
+        "topic": "automaatio/#",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 160,
+        "y": 860,
+        "wires": [
+            [
+                "fbed3860f21e17a6",
+                "42c215c6a4a677dd"
+            ]
+        ]
+    },
+    {
+        "id": "42c215c6a4a677dd",
+        "type": "function",
+        "z": "2500f540ef820631",
+        "name": "Format Data",
+        "func": "// Asetetaan topic, jotta nimi näkyy ylhäällä\nmsg.topic = msg.payload.id;\n\nvar standardData = {};\nstandardData.device = msg.payload.id;\n\n// Tarkistetaan termit - huomaa hakasulkeet ja lainausmerkit välilyönnille!\nif (msg.payload.pCount !== undefined) {\n    standardData.people = Number(msg.payload.pCount);\n} else if (msg.payload[\"person count\"] !== undefined) {\n    standardData.people = Number(msg.payload[\"person count\"]);\n} else {\n    standardData.people = 0;\n}\n\nmsg.payload = standardData;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 860,
+        "wires": [
+            [
+                "b9b9010373eb16ca",
+                "430a83820ba9693b",
+                "c6f3166c756d7709"
+            ]
+        ]
+    },
+    {
+        "id": "b9b9010373eb16ca",
+        "type": "debug",
+        "z": "2500f540ef820631",
+        "name": "debug 3",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "430a83820ba9693b",
+        "type": "mongodb out",
+        "z": "2500f540ef820631",
+        "mongodb": "ee89d8c92fed63c0",
+        "name": "MongoDB Atlas",
+        "collection": "p_count_2",
+        "payonly": false,
+        "upsert": false,
+        "multi": false,
+        "operation": "insert",
+        "x": 840,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "9212fbfbeea284a2",
+        "type": "ui_chart",
+        "z": "2500f540ef820631",
+        "name": "People Count",
+        "group": "b29c813c592b53e4",
+        "order": 2,
+        "width": "20",
+        "height": "20",
+        "label": "Visitors",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1140,
+        "y": 780,
+        "wires": [
+            [
+                "8d6f124244dcfcbc"
+            ]
+        ]
+    },
+    {
+        "id": "8d6f124244dcfcbc",
+        "type": "debug",
+        "z": "2500f540ef820631",
+        "name": "debug 4",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1320,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "c6f3166c756d7709",
+        "type": "function",
+        "z": "2500f540ef820631",
+        "name": "Chart Format",
+        "func": "// Poimitaan vain numeroarvo (people) kuvaajalle\nmsg.payload = Number(msg.payload.people);\n\n// Palautetaan viesti, jossa säilyy aiemmin asetettu msg.topic\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 780,
+        "wires": [
+            [
+                "9212fbfbeea284a2"
+            ]
+        ]
+    },
+    {
+        "id": "2d09840afd5e2d89",
+        "type": "inject",
+        "z": "2500f540ef820631",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "20",
+        "payloadType": "num",
+        "x": 1050,
+        "y": 940,
+        "wires": [
+            [
+                "9212fbfbeea284a2"
+            ]
+        ]
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "CampusBroker",
+        "broker": "mqtt://automaatio:Z0od2PZF65jbtcXu@automaatio.cloud.shiftr.io",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ee89d8c92fed63c0",
+        "type": "mongodb",
+        "hostname": "cluster0.91fze.mongodb.net",
+        "topology": "dnscluster",
+        "connectOptions": "",
+        "port": 27017,
+        "db": "data_ml",
+        "name": "Atlas DB"
+    },
+    {
+        "id": "b29c813c592b53e4",
+        "type": "ui_group",
+        "name": "Mittarit",
+        "tab": "2b5921ba2464e724",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2b5921ba2464e724",
+        "type": "ui_tab",
+        "name": "Koti",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "013686a6aca9063b",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-node-mongodb": "0.2.5",
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
